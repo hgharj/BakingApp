@@ -21,13 +21,13 @@ public class Recipe implements Parcelable {
     @Expose
     private int servings;
 
-    @SerializedName("ingredients")
-    @Expose
-    private ArrayList<Ingredient> ingredients = new ArrayList<>();
-
-    @SerializedName("steps")
-    @Expose
-    private ArrayList<Step> steps = new ArrayList<>();
+//    @SerializedName("ingredients")
+//    @Expose
+//    private ArrayList<Ingredient> ingredients = new ArrayList<>();
+//
+//    @SerializedName("steps")
+//    @Expose
+//    private ArrayList<Step> steps = new ArrayList<>();
 
     public Recipe(int id, String name, int servings) {
         this.id = id;
@@ -59,24 +59,24 @@ public class Recipe implements Parcelable {
         this.servings = servings;
     }
 
-    public ArrayList<Ingredient> getIngredients(){return ingredients;}
-
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
-        this.ingredients=ingredients;
-    }
-
-    public ArrayList<Step> getSteps(){return steps;}
-
-    public void setSteps(ArrayList<Step> steps) {
-        this.steps=steps;
-    }
+//    public ArrayList<Ingredient> getIngredients(){return ingredients;}
+//
+//    public void setIngredients(ArrayList<Ingredient> ingredients) {
+//        this.ingredients=ingredients;
+//    }
+//
+//    public ArrayList<Step> getSteps(){return steps;}
+//
+//    public void setSteps(ArrayList<Step> steps) {
+//        this.steps=steps;
+//    }
 
     public Recipe(Parcel parcel) {
         this.id = parcel.readInt();
         this.name = parcel.readString();
         this.servings = parcel.readInt();
-        this.ingredients = parcel.readArrayList(Ingredient.class.getClassLoader());
-        this.steps = parcel.readArrayList(Step.class.getClassLoader());
+//        this.ingredients = parcel.readArrayList(Ingredient.class.getClassLoader());
+//        this.steps = parcel.readArrayList(Step.class.getClassLoader());
     }
 
     //creator - used when un-parceling our parcel (creating the object)
@@ -102,7 +102,7 @@ public class Recipe implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeInt(servings);
-        dest.writeList(ingredients);
-        dest.writeList(steps);
+//        dest.writeList(ingredients);
+//        dest.writeList(steps);
     }
 }

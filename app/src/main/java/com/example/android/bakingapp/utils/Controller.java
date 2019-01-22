@@ -16,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Controller {
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
     private List<Recipe> mRecipeList;
+    private Recipe mRecipe;
     private static final String LOG_TAG = "Controller";
 
     public List<Recipe> getRecipeList() {
@@ -30,13 +31,16 @@ public class Controller {
 
         RecipeDbAPI recipeDbAPI = retrofit.create(RecipeDbAPI.class);
 
-        Call<RecipeResponse> call;
+        Call<List<Recipe>> call;
         call = recipeDbAPI.getRecipes();
 
         try {
-            Response<RecipeResponse> response = call.execute();
+            Response<List<Recipe>> response = call.execute();
             if (response.errorBody() == null) {
-                mRecipeList = response.body().getRecipeList();
+                mRecipeList = response.body();//.getRecipeList();
+//                for(int i = 0; i < response.body().size() -1; i++){
+//                    mRecipeList.add(response.body().get(i).getRecipe());
+//                }
             } else {
                 Log.v(LOG_TAG, response.errorBody().string());
             }

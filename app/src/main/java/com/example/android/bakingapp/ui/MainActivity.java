@@ -7,6 +7,8 @@ import com.example.android.bakingapp.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+//import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
+
 
     }
 }

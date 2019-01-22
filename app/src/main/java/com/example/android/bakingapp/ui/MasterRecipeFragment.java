@@ -1,6 +1,7 @@
 package com.example.android.bakingapp.ui;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,13 @@ import com.example.android.bakingapp.utils.RecipeResponse;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
+import androidx.loader.content.AsyncTaskLoader;
 import androidx.recyclerview.widget.RecyclerView;
+//import android.support.v7.app.Fragment;
+//import android.support.v7.widget.RecyclerView;
 
 public class MasterRecipeFragment extends Fragment {
+    private RecyclerView mMasterList;
     public MasterRecipeFragment(){}
 
     @Override
@@ -28,15 +33,30 @@ public class MasterRecipeFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.recipe_master_list,container,false);
 
-        RecyclerView masterList = (RecyclerView) rootView.findViewById(R.id.master_recipe_list);
+        mMasterList = (RecyclerView) rootView.findViewById(R.id.master_recipe_list);
 //        List<Recipe> recipes;
-        Controller controller = new Controller();
-        controller.getRecipeList();
-//        RecipeResponse response = new RecipeResponse();
 
-        MasterListAdapter masterListAdapter = new MasterListAdapter(rootView.getContext(),controller.getRecipeList());
-        masterList.setAdapter(masterListAdapter);
+//        RecipeResponse response = new RecipeResponse();
+        new getRecipes().execute();
+
 
         return rootView;
+    }
+
+    private class getRecipes extends AsyncTask<Void,Void,List<Recipe>> {
+        @Override
+        protected void onPostExecute(List<Recipe> recipes) {
+            super.onPostExecute(recipes);
+
+            MasterListAdapter masterListAdapter = new MasterListAdapter(getContext(),recipes);
+            mMasterList.setAdapter(masterListAdapter);
+        }
+
+        @Override
+        protected List<Recipe> doInBackground(Void... voids) {
+            Controller controller = new Controller();
+
+            return controller.getRecipeList();
+        }
     }
 }

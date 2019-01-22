@@ -14,11 +14,12 @@ import com.example.android.bakingapp.utils.Step;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
+//import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+//import android.support.v7.widget.RecyclerView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+//import butterknife.BindView;
+//import butterknife.ButterKnife;
 
 public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.RecipeViewHolder> {
 
@@ -55,11 +56,13 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Re
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.card_tv) TextView card_tv;
+//        @BindView(R.id.card_tv) TextView card_tv;
+        TextView card_tv;
 
         public RecipeViewHolder(View v){
             super(v);
-            ButterKnife.bind(this,v);
+//            ButterKnife.bind(this,v);
+            card_tv = (TextView)v.findViewById(R.id.card_tv);
         }
 
         private void bind(final Recipe recipe){
@@ -68,18 +71,18 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Re
             sb.append("Id: " + recipe.getId() + "\n");
             sb.append("Servings: " + recipe.getServings() + "\n");
             sb.append("Ingredients: " + "\n");
-            for(Ingredient ingredient: recipe.getIngredients()){
-                sb.append("Ingredient" + ingredient.getIngredient() + "\n");
-                sb.append("Measure" + ingredient.getMeasure() + "\n");
-                sb.append("Quantity" + ingredient.getQuantity() + "\n");
-            }
-            for(Step step: recipe.getSteps()){
-                sb.append("Id" + step.getId());
-                sb.append("Short Description:" + step.getShortDescription() + "\n");
-                sb.append("Description" + step.getDescription() + "\n");
-                sb.append("Video Url:" + step.getVideoUrl() + "\n");
-                sb.append("Thumbnail Url" + step.getThumbnailUrl() + "\n");
-            }
+//            for(Ingredient ingredient: recipe.getIngredients()){
+//                sb.append("Ingredient" + ingredient.getIngredient() + "\n");
+//                sb.append("Measure" + ingredient.getMeasure() + "\n");
+//                sb.append("Quantity" + ingredient.getQuantity() + "\n");
+//            }
+//            for(Step step: recipe.getSteps()){
+//                sb.append("Id" + step.getId());
+//                sb.append("Short Description:" + step.getShortDescription() + "\n");
+//                sb.append("Description" + step.getDescription() + "\n");
+//                sb.append("Video Url:" + step.getVideoUrl() + "\n");
+//                sb.append("Thumbnail Url" + step.getThumbnailUrl() + "\n");
+//            }
             card_tv.setText(sb.toString());
         }
     }

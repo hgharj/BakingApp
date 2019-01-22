@@ -10,11 +10,33 @@ import java.util.List;
  */
 
 public class RecipeResponse {
-    @SerializedName("results")
+    @SerializedName("")
     @Expose
     private List<Recipe> recipeList;
+
+    private Recipe recipe;
+
+    public Recipe getRecipe(){
+        return recipe;
+    }
 
     public List<Recipe> getRecipeList() {
         return recipeList;
     }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public void setRecipeList(List<Recipe> recipeList) {
+        this.recipeList = recipeList;
+    }
+
+//    class List<Recipe> {
+//        public List<Recipe> recipes;
+//
+//        public List<Recipe> getRecipes(){
+//            return recipes;
+//        }
+//    }
 }
