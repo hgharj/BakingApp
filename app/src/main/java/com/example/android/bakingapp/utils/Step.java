@@ -21,11 +21,11 @@ public class Step implements Parcelable {
     @Expose
     private String description;
 
-    @SerializedName("videoUrl")
+    @SerializedName("videoURL")
     @Expose
     private String videoUrl;
 
-    @SerializedName("thumbnailUrl")
+    @SerializedName("thumbnailURL")
     @Expose
     private String thumbnailUrl;
 

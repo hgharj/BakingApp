@@ -1,6 +1,7 @@
 package com.example.android.bakingapp.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,17 +16,25 @@ import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.AsyncTaskLoader;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.app.Fragment;
 //import android.support.v7.widget.RecyclerView;
 
 public class MasterRecipeFragment extends Fragment {
     private RecyclerView mMasterList;
+    private OnDataPass dataPasser;
+
     public MasterRecipeFragment(){}
+
+    public interface OnDataPass {
+        void onDataPass(Recipe recipe);
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        dataPasser = (OnDataPass)context;
     }
 
     @Override
@@ -34,6 +43,8 @@ public class MasterRecipeFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.recipe_master_list,container,false);
 
         mMasterList = (RecyclerView) rootView.findViewById(R.id.master_recipe_list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
+        mMasterList.setLayoutManager(linearLayoutManager);
 //        List<Recipe> recipes;
 
 //        RecipeResponse response = new RecipeResponse();
@@ -43,20 +54,30 @@ public class MasterRecipeFragment extends Fragment {
         return rootView;
     }
 
+    public void passData(Recipe recipe){
+        dataPasser.onDataPass(recipe);
+    }
+
     private class getRecipes extends AsyncTask<Void,Void,List<Recipe>> {
         @Override
         protected void onPostExecute(List<Recipe> recipes) {
             super.onPostExecute(recipes);
 
-            MasterListAdapter masterListAdapter = new MasterListAdapter(getContext(),recipes);
+            MasterListAdapter masterListAdapter = new MasterListAdapter(getContext(), recipes, new MasterListAdapter.OnClickListener() {
+                @Override
+                public void onItemClick(Recipe recipe) {
+                    passData(recipe);
+                }
+            });
             mMasterList.setAdapter(masterListAdapter);
         }
 
         @Override
         protected List<Recipe> doInBackground(Void... voids) {
             Controller controller = new Controller();
-
             return controller.getRecipeList();
         }
     }
+
+
 }

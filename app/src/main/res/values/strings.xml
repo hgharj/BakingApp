@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">BakingApp</string>
     <string name="demo_card_text">Dummy Text</string>
+    <string name="ingredients_title">Ingredients: </string>
+    <string name="steps_title">Steps: </string>
+    <string name="carriage_return">\n</string>
+    <string name="ingredient_data">pass-ingredients</string>
 </resources>

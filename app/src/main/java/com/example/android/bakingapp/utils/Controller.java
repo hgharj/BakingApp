@@ -37,10 +37,7 @@ public class Controller {
         try {
             Response<List<Recipe>> response = call.execute();
             if (response.errorBody() == null) {
-                mRecipeList = response.body();//.getRecipeList();
-//                for(int i = 0; i < response.body().size() -1; i++){
-//                    mRecipeList.add(response.body().get(i).getRecipe());
-//                }
+                mRecipeList = response.body();
             } else {
                 Log.v(LOG_TAG, response.errorBody().string());
             }

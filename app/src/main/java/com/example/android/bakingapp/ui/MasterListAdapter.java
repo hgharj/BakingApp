@@ -25,10 +25,16 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Re
 
     private Context context;
     private final List<Recipe> recipes;
+    private final OnClickListener listener;
 
-    public MasterListAdapter(Context context, List<Recipe> recipes){
+    public interface OnClickListener{
+        void onItemClick(Recipe recipe);
+    }
+
+    public MasterListAdapter(Context context, List<Recipe> recipes, OnClickListener listener){
         this.context=context;
         this.recipes=recipes;
+        this.listener=listener;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Re
 
     @Override
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
-        holder.bind(recipes.get(position));
+        holder.bind(recipes.get(position), listener);
     }
 
     public void clear() {
@@ -57,33 +63,50 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Re
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder{
 //        @BindView(R.id.card_tv) TextView card_tv;
-        TextView card_tv;
+//        TextView card_tv;
+        TextView recipe_title_tv;
+        TextView recipe_servings_tv;
 
         public RecipeViewHolder(View v){
             super(v);
 //            ButterKnife.bind(this,v);
-            card_tv = (TextView)v.findViewById(R.id.card_tv);
+//            card_tv = (TextView)v.findViewById(R.id.card_tv);
+            recipe_title_tv = v.findViewById(R.id.recipe_title_tv);
+            recipe_servings_tv = v.findViewById(R.id.recipe_servings_tv);
         }
 
-        private void bind(final Recipe recipe){
+        private void bind(final Recipe recipe, final OnClickListener listener){
+            String servings = "Servings: " + recipe.getServings();
+            recipe_title_tv.setText(recipe.getName());
+            recipe_servings_tv.setText(servings);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(recipe);
+                }
+            });
+        }
+
+        private void ingredientsAndSteps(Recipe recipe){
             StringBuilder sb = new StringBuilder();
             sb.append("Name: " + recipe.getName() + "\n");
             sb.append("Id: " + recipe.getId() + "\n");
-            sb.append("Servings: " + recipe.getServings() + "\n");
-            sb.append("Ingredients: " + "\n");
-//            for(Ingredient ingredient: recipe.getIngredients()){
-//                sb.append("Ingredient" + ingredient.getIngredient() + "\n");
-//                sb.append("Measure" + ingredient.getMeasure() + "\n");
-//                sb.append("Quantity" + ingredient.getQuantity() + "\n");
-//            }
-//            for(Step step: recipe.getSteps()){
-//                sb.append("Id" + step.getId());
-//                sb.append("Short Description:" + step.getShortDescription() + "\n");
-//                sb.append("Description" + step.getDescription() + "\n");
-//                sb.append("Video Url:" + step.getVideoUrl() + "\n");
-//                sb.append("Thumbnail Url" + step.getThumbnailUrl() + "\n");
-//            }
-            card_tv.setText(sb.toString());
+            sb.append("Servings: " + recipe.getServings() + "\n" + "\n");
+            sb.append("     " + "Ingredients " + "\n");
+            for(Ingredient ingredient: recipe.getIngredients()){
+                sb.append("          " + "Ingredient: " + ingredient.getIngredient() + "\n");
+                sb.append("          " + "Measure: " + ingredient.getMeasure() + "\n");
+                sb.append("          " + "Quantity: " + ingredient.getQuantity() + "\n" + "\n");
+            }
+            sb.append("     " + "Steps " + "\n");
+            for(Step step: recipe.getSteps()){
+                sb.append("          " + "Id: " + step.getId() + "\n");
+                sb.append("          " + "Short Description: " + step.getShortDescription() + "\n");
+                sb.append("          " + "Description: " + step.getDescription() + "\n");
+                sb.append("          " + "Video Url: " + step.getVideoUrl() + "\n");
+                sb.append("          " + "Thumbnail Url: " + step.getThumbnailUrl() + "\n");
+            }
+            //            card_tv.setText(sb.toString());
         }
     }
 }
