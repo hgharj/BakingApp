@@ -18,11 +18,11 @@ import androidx.fragment.app.Fragment;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-//import android.support.v7.app.Fragment;
-//import android.support.v7.widget.RecyclerView;
+import butterknife.ButterKnife;
+import butterknife.BindView;
 
 public class MasterRecipeFragment extends Fragment {
-    private RecyclerView mMasterList;
+    @BindView(R.id.master_recipe_list) RecyclerView mMasterList;
     private OnDataPass dataPasser;
 
     public MasterRecipeFragment(){}
@@ -42,14 +42,11 @@ public class MasterRecipeFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.recipe_master_list,container,false);
 
-        mMasterList = (RecyclerView) rootView.findViewById(R.id.master_recipe_list);
+        ButterKnife.bind(this,rootView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
         mMasterList.setLayoutManager(linearLayoutManager);
-//        List<Recipe> recipes;
 
-//        RecipeResponse response = new RecipeResponse();
         new getRecipes().execute();
-
 
         return rootView;
     }

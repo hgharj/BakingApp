@@ -2,12 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <FrameLayout
-        android:id="@+id/media_container"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/step_list"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/media_container_min_height"/>
-    <FrameLayout
-        android:id="@+id/step_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 </LinearLayout>

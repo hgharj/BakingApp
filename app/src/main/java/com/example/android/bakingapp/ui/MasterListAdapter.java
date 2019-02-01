@@ -18,8 +18,8 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.widget.RecyclerView;
 
-//import butterknife.BindView;
-//import butterknife.ButterKnife;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.RecipeViewHolder> {
 
@@ -62,17 +62,12 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Re
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder{
-//        @BindView(R.id.card_tv) TextView card_tv;
-//        TextView card_tv;
-        TextView recipe_title_tv;
-        TextView recipe_servings_tv;
+        @BindView(R.id.recipe_title_tv) TextView recipe_title_tv;
+        @BindView(R.id.recipe_servings_tv) TextView recipe_servings_tv;
 
         public RecipeViewHolder(View v){
             super(v);
-//            ButterKnife.bind(this,v);
-//            card_tv = (TextView)v.findViewById(R.id.card_tv);
-            recipe_title_tv = v.findViewById(R.id.recipe_title_tv);
-            recipe_servings_tv = v.findViewById(R.id.recipe_servings_tv);
+            ButterKnife.bind(this,v);
         }
 
         private void bind(final Recipe recipe, final OnClickListener listener){

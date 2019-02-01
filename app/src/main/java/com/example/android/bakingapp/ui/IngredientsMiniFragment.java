@@ -1,7 +1,14 @@
 package com.example.android.bakingapp.ui;
 
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Layout;
+import android.transition.Scene;
+import android.transition.Slide;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,23 +16,26 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.utils.Ingredient;
+import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.transition.Transition;
 import androidx.transition.TransitionValues;
-import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.BindView;
 
-public class IngredientsFragment extends Fragment implements Transition.TransitionListener, View.OnClickListener {
+public class IngredientsMiniFragment extends Fragment implements Transition.TransitionListener {
     private static final String INGREDIENT_DATA = "pass-ingredients";
     private static final String INGREDIENTS_TITLE = "ingredients-title";
     private static final String INGREDIENTS_DETAIL = "ingredients-detail";
     private OnDataPass dataPasser;
-//    private OnClick clickListener;
+//    private OnClickListener listener;
     private String mIngredientsTitle;
     private String mIngredientsDetail;
     @BindView(R.id.ingredients_card) MaterialCardView mMcw;
@@ -34,7 +44,7 @@ public class IngredientsFragment extends Fragment implements Transition.Transiti
 //    private View mRoot;
 //    private Context mContext;
 
-    public IngredientsFragment() {
+    public IngredientsMiniFragment() {
         super();
     }
 
@@ -42,8 +52,8 @@ public class IngredientsFragment extends Fragment implements Transition.Transiti
         void onDataPass(ArrayList<Ingredient> ingredients);
     }
 
-//    public interface OnClick{
-//        void onClick();
+//    public interface OnClickListener{
+//        void onClick(List<Ingredient> ingredients);
 //    }
     @Override
     public void onAttach(Context context) {
@@ -53,11 +63,11 @@ public class IngredientsFragment extends Fragment implements Transition.Transiti
 //        mContext=context;
     }
 
-    public static IngredientsFragment newInstance() {
+    public static IngredientsMiniFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        IngredientsFragment fragment = new IngredientsFragment();
+        IngredientsMiniFragment fragment = new IngredientsMiniFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -108,7 +118,12 @@ public class IngredientsFragment extends Fragment implements Transition.Transiti
 //            savedInstanceState=ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle();
 //        }
 //        mRoot=rootView;
-        return rootView;
+        try{
+            return rootView;
+        } catch (Exception e){
+            throw e;
+        }
+//        return rootView;
     }
 
     public void passData(ArrayList<Ingredient> ingredients){
@@ -116,16 +131,16 @@ public class IngredientsFragment extends Fragment implements Transition.Transiti
     }
 
 //    public void setOnClickListener(View.OnClickListener onClickListener){
-//        ViewGroup container = (ViewGroup)findViewById(R.id.ingredients_container);
-//        View rootView = LayoutInflater.inflate(R.layout.fragment_ingredients_mini,container,false);
-//        onClickListener.onClick(mRoot);
+////        ViewGroup container = (ViewGroup)findViewById(R.id.ingredients_container);
+////        View rootView = LayoutInflater.inflate(R.layout.fragment_ingredients_mini,container,false);
+////        onClickListener.onClick(mRoot);
 //    }
 
 
-    @Override
-    public void onClick(View v) {
-
-    }
+//    @Override
+//    public void onClick(View v) {
+//
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

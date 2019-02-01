@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".ui.RecipeDetailActivity">
         </activity>
+        <activity android:name=".ui.StepSlidePagerActivity"></activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

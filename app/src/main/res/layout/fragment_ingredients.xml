@@ -4,19 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ingredients_card"
+    android:transitionName="@string/ingredient_card_transition_name"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/mtrl_card_spacing"
     android:layout_marginTop="@dimen/mtrl_card_spacing"
     android:layout_marginRight="@dimen/mtrl_card_spacing"
-    android:minHeight="200dp"
+    android:minHeight="20dp"
     style="@style/Widget.MaterialComponents.CardView">
     <TextView
         android:id="@+id/ingredients_title_tv"
+        android:transitionName="@string/ingredient_title_transition_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
     <TextView
         android:id="@+id/ingredients_tv"
+        android:transitionName="@string/ingredient_detail_transition_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/text_left_padding"
+        android:visibility="visible"/>
 </com.google.android.material.card.MaterialCardView>

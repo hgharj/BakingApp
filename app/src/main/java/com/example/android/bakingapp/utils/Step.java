@@ -80,6 +80,10 @@ public class Step implements Parcelable {
     public Step(Parcel parcel) {
         this.id = parcel.readInt();
         this.shortDescription = parcel.readString();
+        this.description = parcel.readString();
+        this.videoUrl = parcel.readString();
+        this.thumbnailUrl= parcel.readString();
+
     }
 
     //creator - used when un-parceling our parcel (creating the object)

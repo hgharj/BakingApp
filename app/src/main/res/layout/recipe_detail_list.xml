@@ -5,15 +5,15 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <FrameLayout
-        android:id="@+id/media_container"
+        android:id="@+id/ingredients_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/media_container_min_height"/>
-    <fragment
-        android:id="@+id/ingredients_frag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <androidx.recyclerview.widget.RecyclerView
+        android:layout_height="wrap_content"
+        tools:background="@android:color/holo_green_light">
+    </FrameLayout>
+    <FrameLayout
         android:id="@+id/steps_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        tools:background="@android:color/holo_orange_light">
+    </FrameLayout>
 </LinearLayout>
