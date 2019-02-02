@@ -3,15 +3,18 @@
     android:id="@+id/pager"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <FrameLayout
-        android:id="@+id/media_container"
+    android:id="@+id/media_container"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/media_container_min_height">
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/step_player"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/media_container_min_height">
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </FrameLayout>
+        android:layout_height="match_parent"/>
+</FrameLayout>
     <FrameLayout
         android:id="@+id/step_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+        <include layout="@layout/step_list_item"/>
+    </FrameLayout>
 </androidx.viewpager.widget.ViewPager>

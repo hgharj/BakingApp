@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.BindView;
 
 public class StepSlidePagerActivity extends FragmentActivity {
-    private static final int NUM_PAGES=5;
     private static final String STEP_DATA="pass-step";
     private static final String STEP_LIST_DATA ="pass-step-list";
     private static final String STEP_POSITION ="pass-step-position";
@@ -27,7 +26,6 @@ public class StepSlidePagerActivity extends FragmentActivity {
     PagerAdapter mPagerAdapter;
     ArrayList<Step> mSteps;
     int mStepPosition=-1;
-    int mNextStepPosition=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +37,7 @@ public class StepSlidePagerActivity extends FragmentActivity {
         mStepPosition = data.getIntExtra(STEP_POSITION,0);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+        mPager.setCurrentItem(mStepPosition);
     }
 
     @Override
@@ -59,15 +58,7 @@ public class StepSlidePagerActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             StepFragment stepFragment = new StepFragment();
             Bundle bundle = new Bundle();
-            if(mStepPosition+1<mSteps.size()-1){
-                mNextStepPosition=mStepPosition+1;
-            }
-            if(mNextStepPosition>-1) {
-                bundle.putParcelable(STEP_DATA, mSteps.get(mNextStepPosition));
-                mStepPosition=mNextStepPosition;
-            } else {
-                bundle.putParcelable(STEP_DATA, mSteps.get(mStepPosition));
-            }
+            bundle.putParcelable(STEP_DATA, mSteps.get(position));
             stepFragment.setArguments(bundle);
 
             return stepFragment;
