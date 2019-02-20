@@ -2,15 +2,15 @@
 <androidx.viewpager.widget.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/pager"
     android:layout_width="match_parent" android:layout_height="match_parent">
-    <FrameLayout
-    android:id="@+id/media_container"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/media_container_min_height">
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/step_player"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</FrameLayout>
+    <!--<FrameLayout-->
+    <!--android:id="@+id/media_container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/media_container_min_height">-->
+    <!--<com.google.android.exoplayer2.ui.PlayerView-->
+        <!--android:id="@+id/step_player"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+<!--</FrameLayout>-->
     <FrameLayout
         android:id="@+id/step_container"
         android:layout_width="match_parent"

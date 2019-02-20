@@ -9,4 +9,5 @@
     <string name="ingredient_card_transition_name">ingredient_card</string>
     <string name="ingredient_title_transition_name">ingredient_title</string>
     <string name="ingredient_detail_transition_name">ingredient_detail</string>
+    <string name="no_recipes">No Recipes Found.</string>
 </resources>

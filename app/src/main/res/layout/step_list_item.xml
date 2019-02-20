@@ -14,6 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <FrameLayout
+            android:id="@+id/media_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/step_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        </FrameLayout>
         <TextView
             android:id="@+id/step_title_tv"
             android:layout_width="match_parent"

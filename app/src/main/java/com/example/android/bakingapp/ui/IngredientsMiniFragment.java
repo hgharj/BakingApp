@@ -84,15 +84,20 @@ public class IngredientsMiniFragment extends Fragment implements Transition.Tran
         List<Ingredient> ingredients = getArguments().getParcelableArrayList(INGREDIENT_DATA);
 
         StringBuilder sb = new StringBuilder();
-        mIngredientsTitle=getString(R.string.ingredients_title);
-        if (ingredients != null && ingredients.size()>0) {
-            for (Ingredient ingredient : ingredients) {
-                sb.append(ingredient.getIngredient().toLowerCase());
-                sb.append("     ");
-                sb.append(ingredient.getQuantity().toString());
-                sb.append(" ");
-                sb.append(ingredient.getMeasure().toLowerCase());
-                sb.append(getString(R.string.carriage_return));
+        if(savedInstanceState!=null){
+            mIngredientsTitle = savedInstanceState.getString(INGREDIENTS_TITLE);
+            mIngredientsDetail = savedInstanceState.getString(INGREDIENTS_DETAIL);
+        } else {
+            mIngredientsTitle=getString(R.string.ingredients_title);
+            if (ingredients != null && ingredients.size()>0) {
+                for (Ingredient ingredient : ingredients) {
+                    sb.append(ingredient.getIngredient().toLowerCase());
+                    sb.append("     ");
+                    sb.append(ingredient.getQuantity().toString());
+                    sb.append(" ");
+                    sb.append(ingredient.getMeasure().toLowerCase());
+                    sb.append(getString(R.string.carriage_return));
+                }
             }
         }
 
@@ -118,11 +123,7 @@ public class IngredientsMiniFragment extends Fragment implements Transition.Tran
 //            savedInstanceState=ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle();
 //        }
 //        mRoot=rootView;
-        try{
             return rootView;
-        } catch (Exception e){
-            throw e;
-        }
 //        return rootView;
     }
 
@@ -145,6 +146,8 @@ public class IngredientsMiniFragment extends Fragment implements Transition.Tran
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString(INGREDIENTS_TITLE,mIngredientsTitle);
+        outState.putString(INGREDIENTS_DETAIL,mIngredientsDetail);
     }
 
     @Override

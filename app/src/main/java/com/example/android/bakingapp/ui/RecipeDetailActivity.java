@@ -28,6 +28,7 @@ import butterknife.BindView;
 public class RecipeDetailActivity extends AppCompatActivity implements Transition.TransitionListener {
     private static final String INGREDIENT_DATA = "pass-ingredients";
     private static final String STEP_LIST_DATA = "pass-step-list";
+    private static final String STEP_LIST_FRAGMENT = "step-list-fragment";
     private static final String LOG_TAG = RecipeDetailActivity.class.getName();
     private ViewGroup mViewGroup;
     final Context mContext = this;
@@ -36,8 +37,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements Transitio
     @BindView(R.id.ingredients_card) View ingredientsCard;
     @BindView(R.id.ingredients_title_tv) View ingredientsTitleTv;
     @BindView(R.id.ingredients_tv) View ingredientsTv;
-
-
+    private StepListFragment mStepListFragment;
     private FragmentManager mFragmentManager = getSupportFragmentManager();
 
     private Handler mDelayedTransactionHandler = new Handler();
@@ -57,15 +57,20 @@ public class RecipeDetailActivity extends AppCompatActivity implements Transitio
         bundleIngredients.putParcelableArrayList(INGREDIENT_DATA,ingredients);
         ingredientsMiniFragment.setArguments(bundleIngredients);
         fragmentManager.beginTransaction()
-                .add(R.id.ingredients_container, ingredientsMiniFragment)
+                .replace(R.id.ingredients_container, ingredientsMiniFragment)
                 .commit();
 
-        StepListFragment stepListFragment = new StepListFragment();
-        Bundle bundleSteps = new Bundle();
-        bundleSteps.putParcelableArrayList(STEP_LIST_DATA,steps);
-        stepListFragment.setArguments(bundleSteps);
+        if(savedInstanceState!=null){
+            mStepListFragment = (StepListFragment) getSupportFragmentManager().getFragment(savedInstanceState,STEP_LIST_FRAGMENT);
+        } else {
+            mStepListFragment = new StepListFragment();
+            Bundle bundleSteps = new Bundle();
+            bundleSteps.putParcelableArrayList(STEP_LIST_DATA, steps);
+            mStepListFragment.setArguments(bundleSteps);
+
+        }
         fragmentManager.beginTransaction()
-                .add(R.id.steps_rv, stepListFragment)
+                .replace(R.id.steps_rv, mStepListFragment)
                 .commit();
 //        mRunnable=new Runnable() {
 //            @Override
@@ -111,17 +116,25 @@ public class RecipeDetailActivity extends AppCompatActivity implements Transitio
 //        String s = "d";
 //    }
 
-    private void loadInitialFragment()
-    {
-        Fragment initialFragment = IngredientsMiniFragment.newInstance();
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.ingredients_container, initialFragment);
-        fragmentTransaction.commit();
+//    private void loadInitialFragment()
+//    {
+//        Fragment initialFragment = IngredientsMiniFragment.newInstance();
+//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.ingredients_container, initialFragment);
+//        fragmentTransaction.commit();
+//
+//        Fragment stepListFragment = StepListFragment.newInstance();
+//        mFragmentManager.beginTransaction()
+//                .replace(R.id.ingredients_container, initialFragment)
+//                .commit();
+//    }
 
-        Fragment stepListFragment = StepListFragment.newInstance();
-        mFragmentManager.beginTransaction()
-                .replace(R.id.ingredients_container, initialFragment)
-                .commit();
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Save the fragment's instance
+        getSupportFragmentManager().putFragment(outState, STEP_LIST_FRAGMENT, mStepListFragment);
     }
 
     private void performTransition(){

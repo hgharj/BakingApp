@@ -18,7 +18,26 @@
         </activity>
         <activity android:name=".ui.RecipeDetailActivity">
         </activity>
-        <activity android:name=".ui.StepSlidePagerActivity"></activity>
+        <activity android:name=".ui.StepSlidePagerActivity"
+            android:parentActivityName=".ui.RecipeDetailActivity">
+        </activity>
+        <receiver android:name=".ui.StepFragment$MediaReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".widget.RecipeWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_appwidget_info"/>
+        </receiver>
+        <activity android:name=".widget.WidgetConfigurationActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

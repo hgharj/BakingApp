@@ -6,4 +6,5 @@
     <dimen name="text_top_padding">8dp</dimen>
     <dimen name="text_bottom_padding">8dp</dimen>
     <dimen name="media_container_min_height">200dp</dimen>
+    <dimen name="widget_margin">8dp</dimen>
 </resources>
