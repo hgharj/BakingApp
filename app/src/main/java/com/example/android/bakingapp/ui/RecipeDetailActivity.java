@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.utils.Ingredient;
 import com.example.android.bakingapp.utils.Step;
 
 import java.util.ArrayList;
@@ -22,7 +21,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class RecipeDetailActivity extends AppCompatActivity implements StepListFragment.OnDataPass{
-    private static final String INGREDIENT_DATA = "pass-ingredients";
+    private static final String INGREDIENT_DATA = "pass-ingredients-as-string";
+    private static final String INGREDIENT_LIST_DATA = "pass-ingredients-as-arraylist";
     private static final String STEP_LIST_DATA = "pass-step-list";
     private static final String STEP_LIST_FRAGMENT = "step-list-fragment";
     private static final String LOG_TAG = RecipeDetailActivity.class.getName();
@@ -52,7 +52,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         }
 
         Intent data = getIntent();
-//        ArrayList<Ingredient> ingredients = data.getParcelableArrayListExtra(INGREDIENT_DATA);
         String ingredients = data.getStringExtra(INGREDIENT_DATA);
         ArrayList<Step> steps = data.getParcelableArrayListExtra(STEP_LIST_DATA);
         String recipeTitle = data.getStringExtra(RECIPE_TITLE);
@@ -67,7 +66,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         FragmentManager fragmentManager = getSupportFragmentManager();
         IngredientsFragment ingredientsFragment = new IngredientsFragment();
         Bundle bundleIngredients = new Bundle();
-//        bundleIngredients.putParcelableArrayList(INGREDIENT_DATA, ingredients);
         bundleIngredients.putString(INGREDIENT_DATA, ingredients);
         ingredientsFragment.setArguments(bundleIngredients);
         fragmentManager.beginTransaction()
@@ -82,7 +80,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
             mStepListFragment = new StepListFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(STEP_LIST_DATA, steps);
-//            bundle.putParcelableArrayList(INGREDIENT_DATA, ingredients);
             bundle.putString(INGREDIENT_DATA, ingredients);
             bundle.putString(RECIPE_TITLE,recipeTitle);
             mStepListFragment.setArguments(bundle);

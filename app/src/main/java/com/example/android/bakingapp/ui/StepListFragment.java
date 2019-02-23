@@ -4,38 +4,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.utils.Ingredient;
-import com.example.android.bakingapp.utils.Recipe;
 import com.example.android.bakingapp.utils.Step;
 
 import java.util.ArrayList;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.ButterKnife;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class StepListFragment extends Fragment {
-    private static final String INGREDIENT_DATA = "pass-ingredients";
-    private static final String STEP_LIST_DATA ="pass-step-list";
-    private static final String STEP_POSITION ="pass-step-position";
+    private static final String INGREDIENT_DATA = "pass-ingredients-as-string";
+    private static final String INGREDIENT_LIST_DATA = "pass-ingredients-as-arraylist";
+    private static final String STEP_LIST_DATA = "pass-step-list";
+    private static final String STEP_POSITION = "pass-step-position";
     @BindView(R.id.step_list)
     RecyclerView mStepListRecyclerView;
     ArrayList<Step> mSteps;
-    ArrayList<Ingredient> mIngredients;
+    String mIngredients;
     private OnDataPass dataPasser;
-    private StepListAdapter mAdapter;
     private static final String RECYCLER_LAYOUT = "recycler-layout";
     private static final String RECYCLER_LIST_DATA = "recycler-list-data";
     private static final String RECIPE_TITLE = "recipe-title";
@@ -48,56 +42,44 @@ public class StepListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (dataPasser != null){
-            dataPasser = (OnDataPass)context;}
+        if (dataPasser != null) {
+            dataPasser = (OnDataPass) context;
+        }
     }
-
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        if(savedInstanceState!=null){
-//            Parcelable savedRecyclerViewState = savedInstanceState.getParcelable(RECYCLER_LAYOUT);
-//            mStepListRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerViewState);
-//            mSteps = savedInstanceState.getParcelableArrayList(RECYCLER_LIST_DATA);
-//        } else {
-//            mSteps = getArguments().getParcelableArrayList(STEP_LIST_DATA);
-//        }
-//    }
 
     public StepListFragment() {
         super();
     }
 
-    public void passData(ArrayList<Step> steps, int position){
+    public void passData(ArrayList<Step> steps, int position) {
         dataPasser.onDataPass(steps, position);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_list, container, false);
-        ButterKnife.bind(this,rootView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
+        ButterKnife.bind(this, rootView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         mStepListRecyclerView.setLayoutManager(linearLayoutManager);
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             Parcelable savedRecyclerViewState = savedInstanceState.getParcelable(RECYCLER_LAYOUT);
             mStepListRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerViewState);
             mSteps = savedInstanceState.getParcelableArrayList(RECYCLER_LIST_DATA);
         } else {
             mSteps = getArguments().getParcelableArrayList(STEP_LIST_DATA);
-            mIngredients = getArguments().getParcelableArrayList(INGREDIENT_DATA);
+            mIngredients = getArguments().getString(INGREDIENT_DATA);
             mRecipeTitle = getArguments().getString(RECIPE_TITLE);
         }
 
         final StepListAdapter stepListAdapter;
-        if(getResources().getConfiguration().orientation ==
+        if (getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_LANDSCAPE) {
 
             stepListAdapter = new StepListAdapter(getContext(), mSteps, new StepListAdapter.OnClickListener() {
                 @Override
                 public void onItemClick(Step step, int position) {
-                    passData(mSteps,position);
-//                    stepListAdapter.clear();
+                    passData(mSteps, position);
                 }
             });
         } else {
@@ -107,8 +89,8 @@ public class StepListFragment extends Fragment {
                     Intent viewPagerIntent = new Intent(getContext(), StepSlidePagerActivity.class);
                     viewPagerIntent.putParcelableArrayListExtra(STEP_LIST_DATA, mSteps);
                     viewPagerIntent.putExtra(STEP_POSITION, position);
-                    viewPagerIntent.putParcelableArrayListExtra(INGREDIENT_DATA, mIngredients);
-                    viewPagerIntent.putExtra(RECIPE_TITLE,mRecipeTitle);
+                    viewPagerIntent.putExtra(INGREDIENT_DATA, mIngredients);
+                    viewPagerIntent.putExtra(RECIPE_TITLE, mRecipeTitle);
                     startActivity(viewPagerIntent);
                 }
             });
@@ -123,6 +105,6 @@ public class StepListFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(RECYCLER_LAYOUT, mStepListRecyclerView.getLayoutManager().onSaveInstanceState());
-        outState.putParcelableArrayList(RECYCLER_LIST_DATA,mSteps);
+        outState.putParcelableArrayList(RECYCLER_LIST_DATA, mSteps);
     }
 }

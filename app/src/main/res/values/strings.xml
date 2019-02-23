@@ -15,4 +15,6 @@
     <string name="pref_key">shared-pref</string>
     <string name="pref_recipe_name_key">pref-recipe-name</string>
     <string name="pref_recipe_ingredients_key">pref-recipe-ingredients</string>
+
+    <string name="no_internet">Could not connect to the internet. Check network connections and try again.</string>
 </resources>

@@ -27,7 +27,8 @@ import butterknife.ButterKnife;
 import butterknife.BindView;
 
 public class StepSlidePagerActivity extends AppCompatActivity{
-    private static final String INGREDIENT_DATA = "pass-ingredients";
+    private static final String INGREDIENT_DATA = "pass-ingredients-as-string";
+    private static final String INGREDIENT_LIST_DATA = "pass-ingredients-as-arraylist";
     private static final String STEP_DATA="pass-step";
     private static final String STEP_FRAGMENT="step-fragment";
     private static final String STEP_LIST_DATA ="pass-step-list";
@@ -40,7 +41,7 @@ public class StepSlidePagerActivity extends AppCompatActivity{
     PagerAdapter mPagerAdapter;
     private StepFragment mStepFragment;
     ArrayList<Step> mSteps;
-    ArrayList<Ingredient> mIngredients;
+    String mIngredients;
     String mRecipeTitle;
     int mStepPosition=-1;
     boolean mSaveToHistory;
@@ -58,7 +59,7 @@ public class StepSlidePagerActivity extends AppCompatActivity{
             Intent data = getIntent();
             mSteps = data.getParcelableArrayListExtra(STEP_LIST_DATA);
             mStepPosition = data.getIntExtra(STEP_POSITION, 0);
-            mIngredients = data.getParcelableArrayListExtra(INGREDIENT_DATA);
+            mIngredients = data.getStringExtra(INGREDIENT_DATA);
             mRecipeTitle = data.getStringExtra(RECIPE_TITLE);
         }
 
@@ -118,7 +119,7 @@ public class StepSlidePagerActivity extends AppCompatActivity{
         Intent recipeDetail = new Intent(this,RecipeDetailActivity.class);
         recipeDetail.putExtra(RECIPE_TITLE,mRecipeTitle);
         recipeDetail.putParcelableArrayListExtra(STEP_LIST_DATA,mSteps);
-        recipeDetail.putParcelableArrayListExtra(INGREDIENT_DATA,mIngredients);
+        recipeDetail.putExtra(INGREDIENT_DATA,mIngredients);
         startActivity(recipeDetail);
 
         return true;

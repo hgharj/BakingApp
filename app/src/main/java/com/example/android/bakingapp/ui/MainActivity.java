@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.android.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.example.android.bakingapp.R;
@@ -18,11 +20,15 @@ import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.test.espresso.IdlingResource;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MasterRecipeFragment.OnDataPass{
-    private static final String INGREDIENT_DATA = "pass-ingredients";
+    private static final String INGREDIENT_DATA = "pass-ingredients-as-string";
     private static final String STEP_LIST_DATA = "pass-step-list";
     private static final String RECIPE_TITLE = "recipe-title";
+    @BindView(R.id.empty_view)
+    TextView mEmptyTextView;
 
     // The Idling Resource which will be null in production.
     @Nullable
@@ -44,15 +50,20 @@ public class MainActivity extends AppCompatActivity implements MasterRecipeFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        MasterRecipeFragment masterFragment = new MasterRecipeFragment();
-//        Bundle bundleIngredients = new Bundle();
-//        bundleIngredients.putParcelableArrayList(INGREDIENT_DATA, ingredients);
-//        ingredientsFragment.setArguments(bundleIngredients);
-        fragmentManager.beginTransaction()
-                .replace(R.id.recipe_list_container, masterFragment)
-                .commit();
+        if(checkNetworkConnection()) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            MasterRecipeFragment masterFragment = new MasterRecipeFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.recipe_list_container, masterFragment)
+                    .commit();
+
+            mEmptyTextView.setVisibility(View.GONE);
+        } else {
+            mEmptyTextView.setVisibility(View.VISIBLE);
+            mEmptyTextView.setText(R.string.no_internet);
+        }
     }
 
     @Override
@@ -71,12 +82,12 @@ public class MainActivity extends AppCompatActivity implements MasterRecipeFragm
         startActivity(passData);
     }
 
-    public NetworkInfo checkNetworkConnection() {
+    public boolean checkNetworkConnection() {
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
         // Get details on the currently active default data network
-        return connMgr.getActiveNetworkInfo();
+        return connMgr.getActiveNetworkInfo().isConnected();
     }
 }

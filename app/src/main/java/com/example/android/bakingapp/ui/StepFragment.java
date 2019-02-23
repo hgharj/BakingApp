@@ -56,7 +56,6 @@ public class StepFragment extends Fragment implements Player.EventListener {
     ImageView mPlaceholderImage;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
-//    private OnDataPass dataPasser;
     private Context mContext;
     private SimpleExoPlayer mSimpleExoPlayer;
     private Step mStep;
@@ -67,27 +66,16 @@ public class StepFragment extends Fragment implements Player.EventListener {
     MaterialCardView mMcw;
     Uri mp4VideoUri;
     long mPlayerPosition;
-    private static final String VIDEO_EXT=".mp4";
     Unbinder mUnbinder;
-
-//    public interface OnDataPass {
-//        void onDataPass(Step step);
-//    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (dataPasser != null){
-//            dataPasser = (OnDataPass)context;}
     }
 
     public StepFragment() {
         super();
     }
-
-//    public void passData(Step step){
-//        dataPasser.onDataPass(step);
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -125,14 +113,6 @@ public class StepFragment extends Fragment implements Player.EventListener {
             mp4VideoUri = Uri.parse(videoUrl);
             mPlaceholderImage.setVisibility(View.GONE);
             initializePlayer(mp4VideoUri);
-//            ImageButton fullScreenButton = rootView.findViewById(R.id.exo_fullscreen_button);
-//            fullScreenButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    initFullscreenDialog();
-//                    openFullscreenDialog();
-//                }
-//            });
         } else {
             mPlaceholderImage.setVisibility(View.VISIBLE);
             setPlayerVisibility(mSimpleExoPlayerView,false);
@@ -217,9 +197,6 @@ public class StepFragment extends Fragment implements Player.EventListener {
 
         // Do not let MediaButtons restart the player when the app is not visible.
         mMediaSession.setMediaButtonReceiver(null);
-
-//        PlayerControlView pcw = new PlayerControlView(mContext);
-//        pcw.pla
 
         // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
         mStateBuilder = new PlaybackStateCompat.Builder()
@@ -322,7 +299,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+    super.onDestroyView();
         mUnbinder.unbind();
     }
 

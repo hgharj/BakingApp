@@ -23,7 +23,7 @@ public class IngredientsFragment extends Fragment {
     private static final String INGREDIENT_DATA = "pass-ingredients";
     private static final String INGREDIENTS_TITLE = "ingredients-title";
     private static final String INGREDIENTS_DETAIL = "ingredients-detail";
-    private OnDataPass dataPasser;
+//    private OnDataPass dataPasser;
     private String mIngredientsTitle;
     private String mIngredientsDetail;
     @BindView(R.id.ingredients_card) MaterialCardView mMcw;
@@ -34,15 +34,15 @@ public class IngredientsFragment extends Fragment {
         super();
     }
 
-    public interface OnDataPass{
-        void onDataPass(ArrayList<Ingredient> ingredients);
-    }
+//    public interface OnDataPass{
+//        void onDataPass(ArrayList<Ingredient> ingredients);
+//    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (dataPasser != null){
-        dataPasser = (OnDataPass)context;}
+//        if (dataPasser != null){
+//        dataPasser = (OnDataPass)context;}
     }
 
     @Override
@@ -54,37 +54,24 @@ public class IngredientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ingredients,container,false);
         ButterKnife.bind(this,rootView);
-//        List<Ingredient> ingredients = getArguments().getParcelableArrayList(INGREDIENT_DATA);
         String ingredients = getArguments().getString(INGREDIENT_DATA);
 
-        StringBuilder sb = new StringBuilder();
         if(savedInstanceState!=null){
             mIngredientsTitle = savedInstanceState.getString(INGREDIENTS_TITLE);
             mIngredientsDetail = savedInstanceState.getString(INGREDIENTS_DETAIL);
         } else {
             mIngredientsTitle=getString(R.string.ingredients_title);
             mIngredientsDetail=ingredients;
-//            if (ingredients != null && ingredients.size()>0) {
-//                for (Ingredient ingredient : ingredients) {
-//                    sb.append(ingredient.getIngredient().toLowerCase());
-//                    sb.append("     ");
-//                    sb.append(ingredient.getQuantity().toString());
-//                    sb.append(" ");
-//                    sb.append(ingredient.getMeasure().toLowerCase());
-//                    sb.append(getString(R.string.carriage_return));
-//                }
-//            }
         }
 
-//        mIngredientsDetail = sb.toString();
         mIngredients_title_tv.setText(mIngredientsTitle);
         mIngredients_tv.setText(mIngredientsDetail);
             return rootView;
     }
 
-    public void passData(ArrayList<Ingredient> ingredients){
-        dataPasser.onDataPass(ingredients);
-    }
+//    public void passData(ArrayList<Ingredient> ingredients){
+//        dataPasser.onDataPass(ingredients);
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
