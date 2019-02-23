@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.test.espresso.IdlingResource;
 
 public class MainActivity extends AppCompatActivity implements MasterRecipeFragment.OnDataPass{
@@ -43,6 +44,15 @@ public class MainActivity extends AppCompatActivity implements MasterRecipeFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        MasterRecipeFragment masterFragment = new MasterRecipeFragment();
+//        Bundle bundleIngredients = new Bundle();
+//        bundleIngredients.putParcelableArrayList(INGREDIENT_DATA, ingredients);
+//        ingredientsFragment.setArguments(bundleIngredients);
+        fragmentManager.beginTransaction()
+                .replace(R.id.recipe_list_container, masterFragment)
+                .commit();
     }
 
     @Override
@@ -55,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements MasterRecipeFragm
         editor.apply();
 
         Intent passData = new Intent(this, RecipeDetailActivity.class);
-        passData.putExtra(INGREDIENT_DATA, recipe.getIngredients());
+        passData.putExtra(INGREDIENT_DATA, ingredients);
         passData.putExtra(STEP_LIST_DATA, recipe.getSteps());
         passData.putExtra(RECIPE_TITLE, recipe.getName());
         startActivity(passData);

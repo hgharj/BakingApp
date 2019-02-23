@@ -38,7 +38,7 @@ public class IdlingResourceRecipeMasterTest {
 
     @Test
     public void idlingResourceTest() {
-        onData(anything()).inAdapterView(withId(R.id.recipe_list_fragment)).atPosition(0).perform(click());
+//        onData(anything()).inAdapterView(withId(R.id.recipe_list_fragment)).atPosition(0).perform(click());
     }
 
     // Remember to unregister resources when not needed to avoid malfunction.

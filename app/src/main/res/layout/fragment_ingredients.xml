@@ -28,7 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/ingredients_left_margin"
-        android:padding="@dimen/text_left_padding"
         style="@style/description"
         android:text="@string/ingredient_text"/>
     </LinearLayout>

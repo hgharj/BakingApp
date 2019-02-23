@@ -19,10 +19,8 @@
             app:title="@string/app_name"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </FrameLayout>
-<fragment
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/recipe_list_fragment"
-    android:name="com.example.android.bakingapp.ui.MasterRecipeFragment"
+<FrameLayout
+    android:id="@+id/recipe_list_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 </LinearLayout>

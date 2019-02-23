@@ -52,7 +52,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         }
 
         Intent data = getIntent();
-        ArrayList<Ingredient> ingredients = data.getParcelableArrayListExtra(INGREDIENT_DATA);
+//        ArrayList<Ingredient> ingredients = data.getParcelableArrayListExtra(INGREDIENT_DATA);
+        String ingredients = data.getStringExtra(INGREDIENT_DATA);
         ArrayList<Step> steps = data.getParcelableArrayListExtra(STEP_LIST_DATA);
         String recipeTitle = data.getStringExtra(RECIPE_TITLE);
 
@@ -66,7 +67,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
         FragmentManager fragmentManager = getSupportFragmentManager();
         IngredientsFragment ingredientsFragment = new IngredientsFragment();
         Bundle bundleIngredients = new Bundle();
-        bundleIngredients.putParcelableArrayList(INGREDIENT_DATA, ingredients);
+//        bundleIngredients.putParcelableArrayList(INGREDIENT_DATA, ingredients);
+        bundleIngredients.putString(INGREDIENT_DATA, ingredients);
         ingredientsFragment.setArguments(bundleIngredients);
         fragmentManager.beginTransaction()
                 .replace(R.id.ingredients_container, ingredientsFragment)
@@ -80,7 +82,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
             mStepListFragment = new StepListFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(STEP_LIST_DATA, steps);
-            bundle.putParcelableArrayList(INGREDIENT_DATA, ingredients);
+//            bundle.putParcelableArrayList(INGREDIENT_DATA, ingredients);
+            bundle.putString(INGREDIENT_DATA, ingredients);
             bundle.putString(RECIPE_TITLE,recipeTitle);
             mStepListFragment.setArguments(bundle);
 

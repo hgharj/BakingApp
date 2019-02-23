@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.utils.Ingredient;
+import com.example.android.bakingapp.utils.RecipeUtils;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
@@ -53,7 +54,8 @@ public class IngredientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ingredients,container,false);
         ButterKnife.bind(this,rootView);
-        List<Ingredient> ingredients = getArguments().getParcelableArrayList(INGREDIENT_DATA);
+//        List<Ingredient> ingredients = getArguments().getParcelableArrayList(INGREDIENT_DATA);
+        String ingredients = getArguments().getString(INGREDIENT_DATA);
 
         StringBuilder sb = new StringBuilder();
         if(savedInstanceState!=null){
@@ -61,19 +63,20 @@ public class IngredientsFragment extends Fragment {
             mIngredientsDetail = savedInstanceState.getString(INGREDIENTS_DETAIL);
         } else {
             mIngredientsTitle=getString(R.string.ingredients_title);
-            if (ingredients != null && ingredients.size()>0) {
-                for (Ingredient ingredient : ingredients) {
-                    sb.append(ingredient.getIngredient().toLowerCase());
-                    sb.append("     ");
-                    sb.append(ingredient.getQuantity().toString());
-                    sb.append(" ");
-                    sb.append(ingredient.getMeasure().toLowerCase());
-                    sb.append(getString(R.string.carriage_return));
-                }
-            }
+            mIngredientsDetail=ingredients;
+//            if (ingredients != null && ingredients.size()>0) {
+//                for (Ingredient ingredient : ingredients) {
+//                    sb.append(ingredient.getIngredient().toLowerCase());
+//                    sb.append("     ");
+//                    sb.append(ingredient.getQuantity().toString());
+//                    sb.append(" ");
+//                    sb.append(ingredient.getMeasure().toLowerCase());
+//                    sb.append(getString(R.string.carriage_return));
+//                }
+//            }
         }
 
-        mIngredientsDetail = sb.toString();
+//        mIngredientsDetail = sb.toString();
         mIngredients_title_tv.setText(mIngredientsTitle);
         mIngredients_tv.setText(mIngredientsDetail);
             return rootView;
