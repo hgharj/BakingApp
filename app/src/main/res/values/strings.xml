@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">BakingApp</string>
     <string name="demo_card_text">Dummy Text</string>
+    <string name="recipe_name">Brownies</string>
     <string name="ingredients_title">Ingredients</string>
+    <string name="ingredient_text">salt, pepper, lemon, sugar, butter, etc.</string>
     <string name="steps_title">Sheet Pan Nachos, Sticky Sesame Ginger Wings, and Smashed Loaded Potatoes from Reynolds Wrap </string>
     <string name="steps_description">Whisk sriracha, soy sauce, sugar, sesame oil, and ginger in a medium bowl until sugar is dissolved. Pour about a third of sauce into a gallon-sized resealable plastic bag and add wings. Seal bag, pressing out air, then toss to coat wings. Chill at least 4 hours and up to 24. Cover remaining sauce and chill. </string>
     <string name="carriage_return">\n</string>
@@ -10,4 +12,7 @@
     <string name="ingredient_title_transition_name">ingredient_title</string>
     <string name="ingredient_detail_transition_name">ingredient_detail</string>
     <string name="no_recipes">No Recipes Found.</string>
+    <string name="pref_key">shared-pref</string>
+    <string name="pref_recipe_name_key">pref-recipe-name</string>
+    <string name="pref_recipe_ingredients_key">pref-recipe-ingredients</string>
 </resources>

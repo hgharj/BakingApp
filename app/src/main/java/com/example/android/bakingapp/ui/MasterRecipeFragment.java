@@ -84,11 +84,11 @@ public class MasterRecipeFragment extends Fragment {
             new getRecipes().execute();
         }
 
-        passRecipes(mRecipes);
-        if(getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE){
-            passData(mRecipes.get(0));
-        }
+//        passRecipes(mRecipes);
+//        if(getContext().getResources().getConfiguration().orientation ==
+//                Configuration.ORIENTATION_LANDSCAPE){
+//            passData(mRecipes.get(0));
+//        }
         return rootView;
     }
 

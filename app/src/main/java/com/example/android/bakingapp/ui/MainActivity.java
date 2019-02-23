@@ -1,90 +1,64 @@
 package com.example.android.bakingapp.ui;
 
-//import android.support.v7.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.drawable.GradientDrawable;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import com.example.android.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.utils.Ingredient;
 import com.example.android.bakingapp.utils.Recipe;
-import com.example.android.bakingapp.utils.Step;
+import com.example.android.bakingapp.utils.RecipeUtils;
 
-import java.util.ArrayList;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.test.espresso.IdlingResource;
 
-public class MainActivity extends AppCompatActivity implements MasterRecipeFragment.OnDataPass, MasterRecipeFragment.OnRecipesPassed{
+public class MainActivity extends AppCompatActivity implements MasterRecipeFragment.OnDataPass{
     private static final String INGREDIENT_DATA = "pass-ingredients";
     private static final String STEP_LIST_DATA = "pass-step-list";
-    private static final String STEP_LIST_FRAGMENT = "step-list-fragment";
-    private StepListFragment mStepListFragment;
-    private FragmentManager mFragmentManager = getSupportFragmentManager();
-    private boolean mTwoPane;
-    ArrayList<Recipe> mRecipes;
-    ArrayList<Ingredient> mIngredients;
-    ArrayList<Step> mSteps;
-    Recipe mRecipe;
+    private static final String RECIPE_TITLE = "recipe-title";
+
+    // The Idling Resource which will be null in production.
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if(getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE){
-            mTwoPane = true;
-
-            mIngredients = mRecipe.getIngredients();
-            mSteps = mRecipe.getSteps();
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            IngredientsMiniFragment ingredientsMiniFragment = new IngredientsMiniFragment();
-            Bundle bundleIngredients = new Bundle();
-            bundleIngredients.putParcelableArrayList(INGREDIENT_DATA,mIngredients);
-            ingredientsMiniFragment.setArguments(bundleIngredients);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.ingredients_container, ingredientsMiniFragment)
-                    .commit();
-
-            if(savedInstanceState!=null){
-                mStepListFragment = (StepListFragment) getSupportFragmentManager().getFragment(savedInstanceState,STEP_LIST_FRAGMENT);
-            } else {
-                mStepListFragment = new StepListFragment();
-                Bundle bundleSteps = new Bundle();
-                bundleSteps.putParcelableArrayList(STEP_LIST_DATA, mSteps);
-                mStepListFragment.setArguments(bundleSteps);
-
-            }
-            fragmentManager.beginTransaction()
-                    .replace(R.id.steps_rv, mStepListFragment)
-                    .commit();
-        } else {
-            mTwoPane = false;
-        }
     }
 
     @Override
     public void onDataPass(Recipe recipe) {
-        if(getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE){
-                mRecipe = recipe;
-        } else {
-            Intent passData = new Intent(this, RecipeDetailActivity.class);
-            passData.putExtra(INGREDIENT_DATA, recipe.getIngredients());
-            passData.putExtra(STEP_LIST_DATA, recipe.getSteps());
-            startActivity(passData);
-        }
-    }
+        String ingredients = RecipeUtils.formatIngredients(recipe.getIngredients());
+        SharedPreferences sharedPref = getSharedPreferences(RecipeUtils.getPrefKey(),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.pref_recipe_name_key), recipe.getName());
+        editor.putString(getString(R.string.pref_recipe_ingredients_key),ingredients);
+        editor.apply();
 
-    @Override
-    public void onRecipesPassed(ArrayList<Recipe> recipes) {
-        mRecipes = recipes;
+        Intent passData = new Intent(this, RecipeDetailActivity.class);
+        passData.putExtra(INGREDIENT_DATA, recipe.getIngredients());
+        passData.putExtra(STEP_LIST_DATA, recipe.getSteps());
+        passData.putExtra(RECIPE_TITLE, recipe.getName());
+        startActivity(passData);
     }
 
     public NetworkInfo checkNetworkConnection() {
@@ -94,12 +68,5 @@ public class MainActivity extends AppCompatActivity implements MasterRecipeFragm
 
         // Get details on the currently active default data network
         return connMgr.getActiveNetworkInfo();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //Save the fragment's instance
-        getSupportFragmentManager().putFragment(outState, STEP_LIST_FRAGMENT, mStepListFragment);
     }
 }

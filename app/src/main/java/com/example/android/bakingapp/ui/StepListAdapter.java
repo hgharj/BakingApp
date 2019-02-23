@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.utils.RecipeUtils;
 import com.example.android.bakingapp.utils.Step;
 import com.google.android.material.card.MaterialCardView;
 
@@ -18,16 +20,17 @@ import butterknife.ButterKnife;
 
 public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepViewHolder> {
 
-    private Context context;
+    private Context mContext;
     private final List<Step> steps;
     private final OnClickListener listener;
+    private int row_index = -1;
 
     public interface OnClickListener{
         void onItemClick(Step step,int position);
     }
 
     public StepListAdapter(Context context, List<Step> steps, OnClickListener listener){
-        this.context=context;
+        this.mContext=context;
         this.steps=steps;
         this.listener=listener;
     }
@@ -39,8 +42,8 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
     }
 
     @Override
-    public void onBindViewHolder(StepViewHolder holder, int position) {
-        holder.bind(steps.get(position), position, listener);
+    public void onBindViewHolder(final StepViewHolder holder, final int position) {
+        holder.bind(steps.get(position), position, listener, mContext);
     }
 
     public void clear() {
@@ -60,20 +63,42 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
         @BindView(R.id.step_card) MaterialCardView stepCard;
         @BindView(R.id.step_title_tv) TextView stepTitleTv;
         @BindView(R.id.step_desc_tv) TextView stepDescTv;
+        @BindView(R.id.play) ImageView playIv;
 
         public StepViewHolder(View v){
             super(v);
             ButterKnife.bind(this,v);
         }
 
-        private void bind(final Step step, final int position, final OnClickListener listener){
+        private void bind(final Step step, final int position, final OnClickListener listener, final Context context){
             String stepNumber = Integer.toString(step.getId());
-            stepTitleTv.setText(stepNumber + " " + step.getShortDescription());
-            stepDescTv.setText(step.getDescription());
+
+//            stepCard.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+//            if (position==0){
+//                stepCard.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+//            }
+
+            if (position>0){
+                stepCard.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+            }
+
+            String videoUrl = RecipeUtils.getVideoUrl(step);
+            if(videoUrl != null){
+                playIv.setVisibility(View.VISIBLE);
+                playIv.setBackground(context.getResources().getDrawable(R.drawable.play_button));
+            } else {
+                playIv.setVisibility(View.GONE);
+            }
+
+            String shortDesc = stepNumber + ". " + step.getShortDescription();
+            stepTitleTv.setText(shortDesc);
+            String description = RecipeUtils.formatDescription(step);
+            stepDescTv.setText(description);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(step, position);
+                    stepCard.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
                 }
             });
         }

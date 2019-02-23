@@ -1,13 +1,8 @@
 package com.example.android.bakingapp.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.utils.Ingredient;
@@ -15,195 +10,151 @@ import com.example.android.bakingapp.utils.Step;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.transition.Fade;
-import androidx.transition.Transition;
-import androidx.transition.TransitionInflater;
-import androidx.transition.TransitionSet;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class RecipeDetailActivity extends AppCompatActivity implements Transition.TransitionListener {
+public class RecipeDetailActivity extends AppCompatActivity implements StepListFragment.OnDataPass{
     private static final String INGREDIENT_DATA = "pass-ingredients";
     private static final String STEP_LIST_DATA = "pass-step-list";
     private static final String STEP_LIST_FRAGMENT = "step-list-fragment";
     private static final String LOG_TAG = RecipeDetailActivity.class.getName();
-    private ViewGroup mViewGroup;
-    final Context mContext = this;
-    private static final long MOVE_DEFAULT_TIME = 1000;
-    private static final long FADE_DEFAULT_TIME = 300;
-    @BindView(R.id.ingredients_card) View ingredientsCard;
-    @BindView(R.id.ingredients_title_tv) View ingredientsTitleTv;
-    @BindView(R.id.ingredients_tv) View ingredientsTv;
     private StepListFragment mStepListFragment;
-    private FragmentManager mFragmentManager = getSupportFragmentManager();
+    private boolean mTwoPane;
+    private Toolbar mToolbar;
+    private static final String STEP_DATA="pass-step";
+    private static final String STEP_POSITION ="pass-step-position";
+    private static final String RECIPE_TITLE = "recipe-title";
+    @BindView(R.id.pager)
+    ViewPager mPager;
+    PagerAdapter mPagerAdapter;
+    ArrayList<Step> mSteps;
+    int mStepPosition=-1;
 
-    private Handler mDelayedTransactionHandler = new Handler();
-    private Runnable mRunnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recipe_detail_list);
+        if(getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.recipe_detail_list_600dp);
+            ButterKnife.bind(this);
+            mToolbar = findViewById(R.id.toolbar);
+        } else {
+            setContentView(R.layout.recipe_detail_list);
+            mToolbar = findViewById(R.id.toolbar);
+        }
 
         Intent data = getIntent();
         ArrayList<Ingredient> ingredients = data.getParcelableArrayListExtra(INGREDIENT_DATA);
         ArrayList<Step> steps = data.getParcelableArrayListExtra(STEP_LIST_DATA);
+        String recipeTitle = data.getStringExtra(RECIPE_TITLE);
+
+        setSupportActionBar(mToolbar);
+        ActionBar ab = getSupportActionBar();
+        if(ab!=null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setTitle(recipeTitle);
+        }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        IngredientsMiniFragment ingredientsMiniFragment = new IngredientsMiniFragment();
+        IngredientsFragment ingredientsFragment = new IngredientsFragment();
         Bundle bundleIngredients = new Bundle();
-        bundleIngredients.putParcelableArrayList(INGREDIENT_DATA,ingredients);
-        ingredientsMiniFragment.setArguments(bundleIngredients);
+        bundleIngredients.putParcelableArrayList(INGREDIENT_DATA, ingredients);
+        ingredientsFragment.setArguments(bundleIngredients);
         fragmentManager.beginTransaction()
-                .replace(R.id.ingredients_container, ingredientsMiniFragment)
+                .replace(R.id.ingredients_container, ingredientsFragment)
                 .commit();
 
-        if(savedInstanceState!=null){
-            mStepListFragment = (StepListFragment) getSupportFragmentManager().getFragment(savedInstanceState,STEP_LIST_FRAGMENT);
+        if (savedInstanceState != null) {
+            mStepListFragment = (StepListFragment) getSupportFragmentManager().getFragment(savedInstanceState, STEP_LIST_FRAGMENT);
+            mSteps = savedInstanceState.getParcelableArrayList(STEP_DATA);
+            mStepPosition = savedInstanceState.getInt(STEP_POSITION);
         } else {
             mStepListFragment = new StepListFragment();
-            Bundle bundleSteps = new Bundle();
-            bundleSteps.putParcelableArrayList(STEP_LIST_DATA, steps);
-            mStepListFragment.setArguments(bundleSteps);
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(STEP_LIST_DATA, steps);
+            bundle.putParcelableArrayList(INGREDIENT_DATA, ingredients);
+            bundle.putString(RECIPE_TITLE,recipeTitle);
+            mStepListFragment.setArguments(bundle);
 
+            mSteps = steps;
+            mStepPosition = 0;
         }
+
         fragmentManager.beginTransaction()
                 .replace(R.id.steps_rv, mStepListFragment)
                 .commit();
-//        mRunnable=new Runnable() {
-//            @Override
-//            public void run() {
-//                performTransition();
-//            }
-//        };
-//        mRunnable.run();
 
-//        ingredientsMiniFragment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        performTransition();
-//                    }
-//                };
-//            }
-//        });
-
-//        loadInitialFragment();
-//        mDelayedTransactionHandler.postDelayed(mRunnable, 1000);
-
-//        ingredientsMiniFragment.setTra
-//        mViewGroup = (ViewGroup)findViewById(R.id.ingredients_container);
-//        ingredientsMiniFragment.onClick();
-//        ingredientsMiniFragment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT)
-//
-//                    TransitionManager.go(Scene.getSceneForLayout(mViewGroup,R.layout.fragment_ingredients,mContext));
-//
-//                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
-//                    mViewGroup.setElevation(4);
-//            }
-//        });
+        if(getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE) {
+            mTwoPane = true;
+            mPagerAdapter = new RecipeDetailActivity.ScreenSlidePagerAdapter(getSupportFragmentManager());
+            mPager.setAdapter(mPagerAdapter);
+            mPager.setCurrentItem(mStepPosition);
+        }
     }
-
-//    @Override
-//    public void onClick(View v) {
-//        String s = "d";
-//    }
-
-//    private void loadInitialFragment()
-//    {
-//        Fragment initialFragment = IngredientsMiniFragment.newInstance();
-//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.ingredients_container, initialFragment);
-//        fragmentTransaction.commit();
-//
-//        Fragment stepListFragment = StepListFragment.newInstance();
-//        mFragmentManager.beginTransaction()
-//                .replace(R.id.ingredients_container, initialFragment)
-//                .commit();
-//    }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //Save the fragment's instance
         getSupportFragmentManager().putFragment(outState, STEP_LIST_FRAGMENT, mStepListFragment);
-    }
 
-    private void performTransition(){
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
-            if(!isDestroyed()){
-                Fragment previousFragment = mFragmentManager.findFragmentById(R.id.ingredients_container);
-                Fragment nextFragment = IngredientsFragment.newInstance();
+        if(mStepPosition>-1){
+            outState.putInt(STEP_POSITION,mStepPosition);
+        }
 
-                FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-
-                //Exit Previous Fragment
-                Fade exitFade = new Fade();
-                exitFade.setDuration(FADE_DEFAULT_TIME);
-                previousFragment.setExitTransition(exitFade);
-
-                //Share Elements Transition
-                TransitionSet enterTransitionSet = new TransitionSet();
-                enterTransitionSet.addTransition(TransitionInflater.from(this).inflateTransition(R.transition.card_exit));
-                enterTransitionSet.setDuration(MOVE_DEFAULT_TIME);
-                enterTransitionSet.setStartDelay(FADE_DEFAULT_TIME);
-                nextFragment.setSharedElementEnterTransition(enterTransitionSet);
-
-                //Enter New Fragment Transition
-                Fade enterFade = new Fade();
-                enterFade.setStartDelay(MOVE_DEFAULT_TIME + FADE_DEFAULT_TIME);
-                enterFade.setDuration(FADE_DEFAULT_TIME);
-                nextFragment.setEnterTransition(enterFade);
-
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
-                    fragmentTransaction.addSharedElement(ingredientsCard, ingredientsCard.getTransitionName());
-                    fragmentTransaction.addSharedElement(ingredientsTitleTv, ingredientsTitleTv.getTransitionName());
-                    fragmentTransaction.addSharedElement(ingredientsTv, ingredientsTv.getTransitionName());
-                    fragmentTransaction.replace(R.id.ingredients_container,nextFragment);
-                    fragmentTransaction.commitAllowingStateLoss();
-                }
-
-            }
+        if(mSteps!=null){
+            outState.putParcelableArrayList(STEP_DATA,mSteps);
         }
     }
 
     @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-//        mDelayedTransactionHandler.removeCallbacks(mRunnable);
+    public void onDataPass(ArrayList<Step> steps, int position) {
+        mSteps = steps;
+        mStepPosition = position;
     }
 
     @Override
-    public void onTransitionStart(Transition transition) {
-        String s = "";
+    public void onBackPressed() {
+        super.onBackPressed();
+//        if(getResources().getConfiguration().orientation ==
+//                Configuration.ORIENTATION_LANDSCAPE) {
+//            mTwoPane = true;
+//            if (mPager.getCurrentItem() == 0) {
+//                super.onBackPressed();
+//            } else {
+//                mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+//            }
+//        }
     }
 
-    @Override
-    public void onTransitionEnd(Transition transition) {
-        String s = "";
-    }
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-    @Override
-    public void onTransitionCancel(Transition transition) {
+        @Override
+        public Fragment getItem(int position) {
+            StepFragment stepFragment = new StepFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(STEP_DATA, mSteps.get(position));
+            stepFragment.setArguments(bundle);
 
-    }
+            mStepPosition = position;
+            return stepFragment;
+        }
 
-    @Override
-    public void onTransitionPause(Transition transition) {
-
-    }
-
-    @Override
-    public void onTransitionResume(Transition transition) {
-        String s = "";
+        @Override
+        public int getCount() {
+            return mSteps.size();
+        }
     }
 }
