@@ -20,10 +20,9 @@ import butterknife.ButterKnife;
 import butterknife.BindView;
 
 public class IngredientsFragment extends Fragment {
-    private static final String INGREDIENT_DATA = "pass-ingredients";
+    private static final String INGREDIENT_DATA = "pass-ingredients-as-string";
     private static final String INGREDIENTS_TITLE = "ingredients-title";
     private static final String INGREDIENTS_DETAIL = "ingredients-detail";
-//    private OnDataPass dataPasser;
     private String mIngredientsTitle;
     private String mIngredientsDetail;
     @BindView(R.id.ingredients_card) MaterialCardView mMcw;
@@ -34,15 +33,9 @@ public class IngredientsFragment extends Fragment {
         super();
     }
 
-//    public interface OnDataPass{
-//        void onDataPass(ArrayList<Ingredient> ingredients);
-//    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (dataPasser != null){
-//        dataPasser = (OnDataPass)context;}
     }
 
     @Override
@@ -68,10 +61,6 @@ public class IngredientsFragment extends Fragment {
         mIngredients_tv.setText(mIngredientsDetail);
             return rootView;
     }
-
-//    public void passData(ArrayList<Ingredient> ingredients){
-//        dataPasser.onDataPass(ingredients);
-//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

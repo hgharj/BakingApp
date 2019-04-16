@@ -33,6 +33,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
@@ -67,6 +69,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
     Uri mp4VideoUri;
     long mPlayerPosition;
     Unbinder mUnbinder;
+    boolean mUserVisibility;
 
     @Override
     public void onAttach(Context context) {
@@ -82,7 +85,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
         View rootView = inflater.inflate(R.layout.fragment_step, container, false);
         mUnbinder = ButterKnife.bind(this,rootView);
         mContext = getContext();
-
+        mUserVisibility = getUserVisibleHint();
         if(savedInstanceState!=null) {
             mStep = savedInstanceState.getParcelable(STEP_SAVED_DATA);
             mExoPlayerFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN);
@@ -162,12 +165,12 @@ public class StepFragment extends Fragment implements Player.EventListener {
         // Prepare the player with the source.
         mSimpleExoPlayer.prepare(videoSource);
 
-        if (mContext.getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE) {
-            hideUI();
-            mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-            mSimpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-        }
+//        if (mContext.getResources().getConfiguration().orientation ==
+//                Configuration.ORIENTATION_LANDSCAPE) {
+//            hideUI();
+//            mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+//            mSimpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+//        }
     }
 
     private void hideUI() {
@@ -250,6 +253,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
     @Override
     public void onStart() {
         super.onStart();
+        mUserVisibility = getUserVisibleHint();
         if (Util.SDK_INT > 23) {
             if (mSimpleExoPlayer != null) {
                 initializePlayer(mp4VideoUri);
@@ -322,17 +326,23 @@ public class StepFragment extends Fragment implements Player.EventListener {
      */
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if((playbackState == Player.STATE_READY) && playWhenReady){
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
-                    mSimpleExoPlayer.getCurrentPosition(), 1f);
-        } else if((playbackState == Player.STATE_READY)){
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
-                    mSimpleExoPlayer.getCurrentPosition(), 1f);
+        if(mSimpleExoPlayer != null) {
+            if ((playbackState == Player.STATE_READY) && playWhenReady) {
+                mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
+                        mSimpleExoPlayer.getCurrentPosition(), 1f);
+            } else if ((playbackState == Player.STATE_READY)) {
+                mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+                        mSimpleExoPlayer.getCurrentPosition(), 1f);
+            }
+            mMediaSession.setPlaybackState(mStateBuilder.build());
+        } else {
+            String sNull= "null";
         }
-        mMediaSession.setPlaybackState(mStateBuilder.build());
     }
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
+        String sError;
+        sError = error.toString();
     }
 }

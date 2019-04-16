@@ -23,7 +23,6 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
     private Context mContext;
     private final List<Step> steps;
     private final OnClickListener listener;
-    private int row_index = -1;
 
     public interface OnClickListener{
         void onItemClick(Step step,int position);
@@ -72,11 +71,8 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
 
         private void bind(final Step step, final int position, final OnClickListener listener, final Context context){
             String stepNumber = Integer.toString(step.getId());
-
-//            stepCard.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
-//            if (position==0){
-//                stepCard.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-//            }
+            final Integer prevPosition = -1;
+            final Boolean prevFlag = false;
 
             if (position>0){
                 stepCard.setBackgroundColor(context.getResources().getColor(android.R.color.white));
@@ -94,10 +90,14 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepVi
             stepTitleTv.setText(shortDesc);
             String description = RecipeUtils.formatDescription(step);
             stepDescTv.setText(description);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(step, position);
+                    if(prevFlag){
+
+                    }
                     stepCard.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
                 }
             });

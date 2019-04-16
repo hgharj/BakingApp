@@ -1,10 +1,13 @@
 package com.example.android.bakingapp.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -106,32 +109,35 @@ public class StepSlidePagerActivity extends AppCompatActivity{
                 mPageHistory.pop();
                 if(mPageHistory.size()< 1){
                     super.onBackPressed();
+//                    recipeDetailIntent();
                 }
             }
-            mPager.setCurrentItem(mPageHistory.pop());
-            mSaveToHistory = true;
+            if(mPageHistory.size()> 0) {
+                mPager.setCurrentItem(mPageHistory.pop());
+                mSaveToHistory = true;
+            }
         }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        super.onSupportNavigateUp();
+//        super.onSupportNavigateUp();
+        recipeDetailIntent();
+        return true;
+    }
+
+    public void recipeDetailIntent(){
         Intent recipeDetail = new Intent(this,RecipeDetailActivity.class);
         recipeDetail.putExtra(RECIPE_TITLE,mRecipeTitle);
         recipeDetail.putParcelableArrayListExtra(STEP_LIST_DATA,mSteps);
         recipeDetail.putExtra(INGREDIENT_DATA,mIngredients);
         startActivity(recipeDetail);
-
-        return true;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 //        //Save the fragment's instance
-//        if(mStepFragment!=null) {
-//            getSupportFragmentManager().putFragment(outState, STEP_FRAGMENT, mStepFragment);
-//        }
 
         if(mStepPosition>-1){
             outState.putInt(STEP_POSITION,mStepPosition);
@@ -146,6 +152,7 @@ public class StepSlidePagerActivity extends AppCompatActivity{
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
+        Integer pos;
 
         @Override
         public Fragment getItem(int position) {
@@ -153,7 +160,7 @@ public class StepSlidePagerActivity extends AppCompatActivity{
             Bundle bundle = new Bundle();
             bundle.putParcelable(STEP_DATA, mSteps.get(position));
             stepFragment.setArguments(bundle);
-
+            pos = getItemPosition(stepFragment);
             mStepPosition = position;
             return stepFragment;
         }

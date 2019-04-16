@@ -56,7 +56,7 @@ public class RecipeDetailTest {
 
 
     @Test
-    public void clickRecipe_LaunchRecipeDetailActivityIntent() {
+    public void clickRecipe_LaunchRecipeDetailActivityIntent() throws Exception{
         onView(withId(R.id.master_recipe_list))
                 .perform(RecyclerViewActions.actionOnItem(
                         hasDescendant(withText(RECIPE_ITEM_BROWNIE)), click()));

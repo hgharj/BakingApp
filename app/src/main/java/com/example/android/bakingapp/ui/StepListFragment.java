@@ -1,5 +1,6 @@
 package com.example.android.bakingapp.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -33,7 +34,11 @@ public class StepListFragment extends Fragment {
     private static final String RECYCLER_LAYOUT = "recycler-layout";
     private static final String RECYCLER_LIST_DATA = "recycler-list-data";
     private static final String RECIPE_TITLE = "recipe-title";
+    private static final String PREVIOUS_POSITION = "previous-position";
+    private static final String PREVIOUS_FLAG = "previous-flag";
     String mRecipeTitle;
+    Integer mPrevPosition = -1;
+    Boolean mPrevFlag = false;
 
     public interface OnDataPass {
         void onDataPass(ArrayList<Step> steps, int position);
@@ -66,6 +71,8 @@ public class StepListFragment extends Fragment {
             Parcelable savedRecyclerViewState = savedInstanceState.getParcelable(RECYCLER_LAYOUT);
             mStepListRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerViewState);
             mSteps = savedInstanceState.getParcelableArrayList(RECYCLER_LIST_DATA);
+            mPrevPosition = savedInstanceState.getInt(PREVIOUS_POSITION);
+            mPrevFlag = savedInstanceState.getBoolean(PREVIOUS_FLAG);
         } else {
             mSteps = getArguments().getParcelableArrayList(STEP_LIST_DATA);
             mIngredients = getArguments().getString(INGREDIENT_DATA);
@@ -86,6 +93,14 @@ public class StepListFragment extends Fragment {
             stepListAdapter = new StepListAdapter(getContext(), mSteps, new StepListAdapter.OnClickListener() {
                 @Override
                 public void onItemClick(Step step, int position) {
+                    if(mPrevPosition != position){
+                        mPrevPosition = position;
+                        mPrevFlag = true;
+                    } else {
+                        mPrevPosition = -1;
+                        mPrevFlag = false;
+                    }
+
                     Intent viewPagerIntent = new Intent(getContext(), StepSlidePagerActivity.class);
                     viewPagerIntent.putParcelableArrayListExtra(STEP_LIST_DATA, mSteps);
                     viewPagerIntent.putExtra(STEP_POSITION, position);
@@ -106,5 +121,7 @@ public class StepListFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putParcelable(RECYCLER_LAYOUT, mStepListRecyclerView.getLayoutManager().onSaveInstanceState());
         outState.putParcelableArrayList(RECYCLER_LIST_DATA, mSteps);
+        outState.putInt(PREVIOUS_POSITION, mPrevPosition);
+        outState.putBoolean(PREVIOUS_FLAG,mPrevFlag);
     }
 }
