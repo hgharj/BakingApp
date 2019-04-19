@@ -47,17 +47,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.recipe_detail_list);
+
         if(findViewById(R.id.pager) != null) {
             mTwoPane = true;
-//            setContentView(R.layout.recipe_detail_list_600dp);
             ButterKnife.bind(this);
             mToolbar = findViewById(R.id.toolbar);
-            mPagerAdapter = new RecipeDetailActivity.ScreenSlidePagerAdapter(getSupportFragmentManager());
-            mPager.setAdapter(mPagerAdapter);
-            mPager.setCurrentItem(mStepPosition);
         } else {
             mTwoPane = false;
-            setContentView(R.layout.recipe_detail_list);
             mToolbar = findViewById(R.id.toolbar);
         }
 
@@ -105,6 +102,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListF
 //        fragmentManager.beginTransaction()
                 .replace(R.id.steps_rv, mStepListFragment)
                 .commit();
+
+        if (mTwoPane){
+            mPagerAdapter = new RecipeDetailActivity.ScreenSlidePagerAdapter(getSupportFragmentManager());
+            mPager.setAdapter(mPagerAdapter);
+            mPager.setCurrentItem(mStepPosition);
+        }
     }
 
     @Override
